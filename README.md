@@ -137,28 +137,181 @@ shieldpay/
 
 ---
 
-## Roadmap
+## Roadmap: 10-Wave Development Plan
+
+ShieldPay is being built as part of the [Aleo Privacy Buildathon](https://app.akindo.io) — a 3-month program with 10 progressive waves. Each wave is 14 days (10 build days + 4 evaluation days).
 
 ### Phase 1: Core Infrastructure (Waves 1-3)
-- [x] Project setup and documentation
-- [ ] Basic private payment contract
-- [ ] Employer dashboard
-- [ ] Employee portal
+
+#### Wave 1: First Private Payment (Jan 20 - Feb 3)
+**Goal**: Prove the core ZK payment concept works
+
+| Deliverable | Status |
+|-------------|--------|
+| Leo contract: single private payment | ⬜ |
+| Basic web UI (connect wallet, send payment) | ⬜ |
+| Recipient sees only their payment | ⬜ |
+| Testnet deployment | ⬜ |
+| GitHub repo with README | ✅ |
+
+**Privacy Demonstrated**: Payment amounts hidden from public
+
+---
+
+#### Wave 2: Employer Dashboard (Feb 3 - Feb 17)
+**Goal**: Multi-recipient payments and employee management
+
+| Deliverable | Status |
+|-------------|--------|
+| Add/manage employee records (encrypted) | ⬜ |
+| Batch payment to multiple recipients (3-5) | ⬜ |
+| Payment confirmation flow | ⬜ |
+| Improved UI/UX | ⬜ |
+
+**Privacy Demonstrated**: Individual salaries hidden from each other
+
+---
+
+#### Wave 3: Employee Portal (Feb 17 - Mar 3)
+**Goal**: Employee-facing features
+
+| Deliverable | Status |
+|-------------|--------|
+| Employee login/dashboard | ⬜ |
+| View personal payment history | ⬜ |
+| Download payment receipts | ⬜ |
+| Mobile-responsive design | ⬜ |
+
+**Privacy Demonstrated**: Employees see only their own data
+
+---
 
 ### Phase 2: ZK Proofs & Verification (Waves 4-6)
-- [ ] Compliance proof generation
-- [ ] Income verification proofs
-- [ ] Recurring payments
+
+#### Wave 4: Compliance Proofs (Mar 3 - Mar 17)
+**Goal**: Enterprise-ready compliance features
+
+| Deliverable | Status |
+|-------------|--------|
+| ZK proof: "total payroll in range X-Y" | ⬜ |
+| ZK proof: "no payment exceeded $X" | ⬜ |
+| Auditor verification interface | ⬜ |
+| Proof generation UI | ⬜ |
+
+**Privacy Demonstrated**: Prove compliance without revealing individual amounts
+
+---
+
+#### Wave 5: Income Verification (Mar 17 - Mar 31)
+**Goal**: Employee-generated proofs for third parties
+
+| Deliverable | Status |
+|-------------|--------|
+| Employee generates proof of income | ⬜ |
+| "I earn ≥ $X/month" proof | ⬜ |
+| "Employed for ≥ Y months" proof | ⬜ |
+| Shareable verification links | ⬜ |
+
+**Privacy Demonstrated**: Prove income without revealing exact salary
+
+---
+
+#### Wave 6: Recurring & Scheduling (Mar 31 - Apr 14)
+**Goal**: Automated payment workflows
+
+| Deliverable | Status |
+|-------------|--------|
+| Recurring payment setup | ⬜ |
+| Payment templates by department | ⬜ |
+| Scheduled execution | ⬜ |
+| Email/notification system | ⬜ |
+
+**Privacy Demonstrated**: Automated private payments
+
+---
 
 ### Phase 3: AI Integration (Waves 7-8)
-- [ ] Natural language payment commands
-- [ ] Privacy-preserving analytics
-- [ ] Cash flow forecasting
+
+#### Wave 7: AI Assistant v1 (Apr 14 - Apr 28)
+**Goal**: Natural language payment interface
+
+| Deliverable | Status |
+|-------------|--------|
+| Natural language payment commands | ⬜ |
+| "Pay engineering team" → executes | ⬜ |
+| Confirmation flows with AI | ⬜ |
+| Basic intent parsing | ⬜ |
+
+**Privacy Demonstrated**: AI triggers ZK payments without seeing amounts
+
+---
+
+#### Wave 8: AI Analytics (Apr 28 - May 12)
+**Goal**: Privacy-preserving insights
+
+| Deliverable | Status |
+|-------------|--------|
+| Aggregated insights dashboard | ⬜ |
+| Department-level trends (not individual) | ⬜ |
+| Cash flow forecasting | ⬜ |
+| Anomaly flagging via ZK queries | ⬜ |
+
+**Privacy Demonstrated**: Analytics without exposing individual data
+
+---
 
 ### Phase 4: Enterprise & Mainnet (Waves 9-10)
-- [ ] Multi-sig workflows
-- [ ] DAO treasury integration
-- [ ] Mainnet deployment
+
+#### Wave 9: Enterprise Features (May 12 - May 26)
+**Goal**: Production-ready enterprise features
+
+| Deliverable | Status |
+|-------------|--------|
+| Multi-sig approval workflows | ⬜ |
+| Role-based access control | ⬜ |
+| DAO treasury integration | ⬜ |
+| API documentation | ⬜ |
+
+**Privacy Demonstrated**: Enterprise-grade privacy controls
+
+---
+
+#### Wave 10: Mainnet Launch (May 26 - Jun 9)
+**Goal**: Ship to production
+
+| Deliverable | Status |
+|-------------|--------|
+| Mainnet deployment | ⬜ |
+| Security review/hardening | ⬜ |
+| Full documentation | ⬜ |
+| Demo video | ⬜ |
+| Landing page | ⬜ |
+
+**Privacy Demonstrated**: Production-ready private payroll
+
+---
+
+### Wave Submission Checklist
+
+Each wave submission includes:
+
+1. **Project Overview**: Name, description, problem solved, PMF/GTM plan
+2. **Working Demo**: Deployed on Aleo Testnet (or Mainnet for Wave 10)
+3. **Technical Documentation**: GitHub repo with README, architecture overview
+4. **Team Information**: Member names, Discord handles, Aleo wallet addresses
+5. **Progress Changelog** (Wave 2+): What changed, feedback incorporated, next goals
+
+---
+
+### Judging Criteria
+
+| Criteria | Weight | Our Approach |
+|----------|--------|--------------|
+| **Privacy Usage** | 40% | Multiple ZK proofs: payments, compliance, income verification |
+| **Technical Implementation** | 20% | Leo contracts + AI integration |
+| **User Experience** | 20% | AI chat interface, clean dashboard |
+| **Practicality** | 10% | Real demand from DAOs, crypto companies, freelancers |
+| **Novelty** | 10% | AI + ZK payroll is unique in the ecosystem |
 
 ---
 

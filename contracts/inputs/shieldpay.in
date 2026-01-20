@@ -1,0 +1,22 @@
+// ============================================
+// Test Inputs for ShieldPay
+// ============================================
+//
+// These are sample inputs for testing the contract locally.
+// In production, these come from the frontend/wallet.
+//
+
+// Test: pay_private
+// Scenario: Employer pays employee 5000 tokens
+[pay_private]
+recipient: address = aleo1az8p9vlllyqwtj0c2g9svkd0e5v0p3pfrat4xpvt43z9pshwrc8s44zxpr;
+amount: u64 = 5000000000u64;  // 5000 tokens (assuming 6 decimal places)
+timestamp: u64 = 1705708800u64;  // Example: Jan 20, 2026 00:00:00 UTC
+
+// Test: pay_private_with_memo
+// Scenario: Employer pays employee with a memo
+[pay_private_with_memo]
+recipient: address = aleo1az8p9vlllyqwtj0c2g9svkd0e5v0p3pfrat4xpvt43z9pshwrc8s44zxpr;
+amount: u64 = 5000000000u64;
+timestamp: u64 = 1705708800u64;
+memo: field = 12345field;  // In production, this would be hash("January Salary")
