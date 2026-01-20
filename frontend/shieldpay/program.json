@@ -1,0 +1,6 @@
+{
+  "program": "shieldpay.aleo",
+  "version": "0.1.0",
+  "description": "Privacy-preserving payroll and B2B payments on Aleo",
+  "license": "MIT"
+}
