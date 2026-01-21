@@ -2,11 +2,13 @@ import { useState } from "react";
 import "./App.css";
 import shieldpay_program from "../shieldpay/build/main.aleo?raw";
 import { AleoWorker } from "./workers/AleoWorker.js";
+import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
+import { WalletMultiButton } from "@demox-labs/aleo-wallet-adapter-reactui";
 
 const aleoWorker = AleoWorker();
 
 function App() {
-  const [account, setAccount] = useState(null);
+  const { publicKey, connected, disconnect } = useWallet();
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
   const [executing, setExecuting] = useState(false);
@@ -14,13 +16,11 @@ function App() {
   const [error, setError] = useState(null);
   const [txHistory, setTxHistory] = useState([]);
 
-  const connectWallet = () => {
-    setAccount("aleo1rhgdu77hgyqd3xjj8ucu3jj9r2krwz6mnzyd80gncr5fxcwlh5rsvzp9px");
-    setError(null);
-  };
+  // Use publicKey as account address
+  const account = publicKey;
 
   const disconnectWallet = () => {
-    setAccount(null);
+    disconnect();
     setResult(null);
   };
 
@@ -102,16 +102,14 @@ function App() {
           <a href="#" className="nav-link">Settings</a>
         </div>
         <div className="nav-wallet">
-          {account ? (
+          {connected && account ? (
             <div className="wallet-connected-nav">
               <span className="wallet-dot"></span>
               <span className="wallet-addr">{account.slice(0, 8)}...{account.slice(-6)}</span>
               <button onClick={disconnectWallet} className="btn-disconnect">×</button>
             </div>
           ) : (
-            <button onClick={connectWallet} className="btn-connect">
-              Connect Wallet
-            </button>
+            <WalletMultiButton className="btn-connect" />
           )}
         </div>
       </nav>
@@ -126,14 +124,12 @@ function App() {
           </div>
 
           <div className="payment-card">
-            {!account ? (
+            {!connected ? (
               <div className="connect-prompt">
                 <div className="connect-icon">🔐</div>
                 <h3>Connect Your Wallet</h3>
                 <p>Connect your Aleo wallet to start sending private payments</p>
-                <button onClick={connectWallet} className="btn btn-primary btn-large">
-                  Connect Wallet
-                </button>
+                <WalletMultiButton className="btn btn-primary btn-large" />
               </div>
             ) : (
               <>
