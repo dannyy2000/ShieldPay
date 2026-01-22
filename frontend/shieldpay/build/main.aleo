@@ -27,3 +27,6 @@ function pay_with_memo:
     input r3 as field.private;
     cast r0 r1 self.caller r2 r3 into r4 as MemoPayment.record;
     output r4 as MemoPayment.record;
+
+constructor:
+    assert.eq edition 0u16;

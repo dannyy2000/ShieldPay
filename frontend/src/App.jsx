@@ -4,17 +4,22 @@ import shieldpay_program from "../shieldpay/build/main.aleo?raw";
 import { AleoWorker } from "./workers/AleoWorker.js";
 import { useWallet } from "@demox-labs/aleo-wallet-adapter-react";
 import { WalletMultiButton } from "@demox-labs/aleo-wallet-adapter-reactui";
+import { Transaction, WalletAdapterNetwork } from "@demox-labs/aleo-wallet-adapter-base";
 
 const aleoWorker = AleoWorker();
 
+// Program ID - update this after testnet deployment
+const PROGRAM_ID = "shieldpay.aleo";
+
 function App() {
-  const { publicKey, connected, disconnect } = useWallet();
+  const { publicKey, connected, disconnect, requestTransaction } = useWallet();
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
   const [executing, setExecuting] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [txHistory, setTxHistory] = useState([]);
+  const [txMode, setTxMode] = useState("local"); // "local" or "network"
 
   // Use publicKey as account address
   const account = publicKey;
@@ -47,34 +52,59 @@ function App() {
       const amountInMicro = Math.floor(Number(amount) * 1000000);
       const timestamp = Math.floor(Date.now() / 1000);
 
-      const inputs = [
-        cleanRecipient,
-        `${amountInMicro}u64`,
-        `${timestamp}u64`,
-      ];
+      let output;
+      let txId = null;
 
-      const output = await aleoWorker.localProgramExecution(
-        shieldpay_program,
-        "pay_private",
-        inputs
-      );
+      if (txMode === "network" && requestTransaction) {
+        // Network mode - submit real transaction via wallet
+        const inputs = [cleanRecipient, `${amountInMicro}u64`, `${timestamp}u64`];
+
+        const aleoTransaction = Transaction.createTransaction(
+          publicKey,
+          WalletAdapterNetwork.TestnetBeta,
+          PROGRAM_ID,
+          "pay_private",
+          inputs,
+          Math.floor(0.01 * 1000000), // fee in microcredits
+          false
+        );
+
+        txId = await requestTransaction(aleoTransaction);
+        output = { transactionId: txId };
+      } else {
+        // Local mode - generate proof locally (demo mode)
+        const inputs = [
+          cleanRecipient,
+          `${amountInMicro}u64`,
+          `${timestamp}u64`,
+        ];
+
+        output = await aleoWorker.localProgramExecution(
+          shieldpay_program,
+          "pay_private",
+          inputs
+        );
+      }
 
       const newTx = {
         id: Date.now(),
         recipient: cleanRecipient,
         amount: amount,
         timestamp: new Date().toLocaleString(),
-        status: "success"
+        status: txMode === "network" ? "pending" : "local",
+        txId: txId,
       };
 
       setTxHistory(prev => [newTx, ...prev]);
       setResult({
         success: true,
         output: output,
+        mode: txMode,
         details: {
           recipient: cleanRecipient,
           amount: amount,
           timestamp: new Date(timestamp * 1000).toLocaleString(),
+          transactionId: txId,
         }
       });
       setRecipient("");
@@ -89,17 +119,25 @@ function App() {
 
   return (
     <div className="app">
+      {/* Network Banner */}
+      <div className="network-banner">
+        <span className="network-indicator"></span>
+        <span>Aleo Testnet</span>
+        <span className="network-info">Wave 1 Demo</span>
+      </div>
+
       {/* Navigation */}
       <nav className="navbar">
         <div className="nav-brand">
           <span className="nav-logo">🛡️</span>
           <span className="nav-title">ShieldPay</span>
+          <span className="nav-tagline">Private Payroll</span>
         </div>
         <div className="nav-links">
           <a href="#" className="nav-link active">Dashboard</a>
-          <a href="#" className="nav-link">Employees</a>
-          <a href="#" className="nav-link">History</a>
-          <a href="#" className="nav-link">Settings</a>
+          <a href="#" className="nav-link disabled">Employees</a>
+          <a href="#" className="nav-link disabled">History</a>
+          <a href="#" className="nav-link disabled">Settings</a>
         </div>
         <div className="nav-wallet">
           {connected && account ? (
@@ -172,14 +210,45 @@ function App() {
                   </div>
                 </div>
 
+                <div className="form-section">
+                  <label>Transaction Mode</label>
+                  <div className="mode-toggle">
+                    <button
+                      type="button"
+                      className={`mode-btn ${txMode === "local" ? "active" : ""}`}
+                      onClick={() => setTxMode("local")}
+                    >
+                      Local Demo
+                    </button>
+                    <button
+                      type="button"
+                      className={`mode-btn ${txMode === "network" ? "active" : ""}`}
+                      onClick={() => setTxMode("network")}
+                    >
+                      Testnet
+                    </button>
+                  </div>
+                  <p className="mode-hint">
+                    {txMode === "local"
+                      ? "Generates ZK proof locally without submitting to network"
+                      : "Submits transaction to Aleo testnet (requires testnet credits)"}
+                  </p>
+                </div>
+
                 <div className="payment-summary">
                   <div className="summary-row">
                     <span>Network Fee</span>
-                    <span>~0.01 ALEO</span>
+                    <span>{txMode === "network" ? "~0.01 ALEO" : "Free (local)"}</span>
                   </div>
                   <div className="summary-row">
                     <span>Privacy</span>
                     <span className="privacy-badge">🔒 Fully Private</span>
+                  </div>
+                  <div className="summary-row">
+                    <span>Mode</span>
+                    <span className={txMode === "network" ? "network-badge" : "local-badge"}>
+                      {txMode === "network" ? "🌐 Testnet" : "💻 Local"}
+                    </span>
                   </div>
                 </div>
 
@@ -218,7 +287,9 @@ function App() {
               <div className="alert alert-success">
                 <div className="alert-header">
                   <span className="alert-icon">✅</span>
-                  <span className="alert-title">Payment Successful!</span>
+                  <span className="alert-title">
+                    {result.mode === "network" ? "Transaction Submitted!" : "Payment Successful!"}
+                  </span>
                 </div>
                 <div className="alert-body">
                   <div className="alert-row">
@@ -229,9 +300,26 @@ function App() {
                     <span>Amount:</span>
                     <strong>{result.details.amount} ALEO</strong>
                   </div>
+                  {result.details.transactionId && (
+                    <div className="alert-row">
+                      <span>Tx ID:</span>
+                      <a
+                        href={`https://testnet.aleoscan.io/transaction?id=${result.details.transactionId}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="tx-link"
+                      >
+                        {result.details.transactionId.slice(0, 16)}...
+                      </a>
+                    </div>
+                  )}
+                  <div className="alert-row">
+                    <span>Mode:</span>
+                    <span>{result.mode === "network" ? "Testnet" : "Local Demo"}</span>
+                  </div>
                 </div>
                 <details className="alert-details">
-                  <summary>View encrypted record</summary>
+                  <summary>View {result.mode === "network" ? "transaction details" : "encrypted record"}</summary>
                   <pre>{JSON.stringify(result.output, null, 2)}</pre>
                 </details>
               </div>
@@ -288,10 +376,24 @@ function App() {
               <div className="tx-list">
                 {txHistory.map(tx => (
                   <div key={tx.id} className="tx-item">
-                    <div className="tx-icon">↗</div>
+                    <div className={`tx-icon ${tx.status === "local" ? "local" : ""}`}>
+                      {tx.status === "local" ? "💻" : "↗"}
+                    </div>
                     <div className="tx-details">
                       <span className="tx-addr">{tx.recipient.slice(0, 10)}...{tx.recipient.slice(-6)}</span>
-                      <span className="tx-time">{tx.timestamp}</span>
+                      <span className="tx-time">
+                        {tx.timestamp}
+                        {tx.txId && (
+                          <a
+                            href={`https://testnet.aleoscan.io/transaction?id=${tx.txId}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="tx-explorer-link"
+                          >
+                            View
+                          </a>
+                        )}
+                      </span>
                     </div>
                     <div className="tx-amount">-{tx.amount} ALEO</div>
                   </div>

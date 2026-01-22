@@ -148,10 +148,10 @@ ShieldPay is being built as part of the [Aleo Privacy Buildathon](https://app.ak
 
 | Deliverable | Status |
 |-------------|--------|
-| Leo contract: single private payment | ⬜ |
-| Basic web UI (connect wallet, send payment) | ⬜ |
-| Recipient sees only their payment | ⬜ |
-| Testnet deployment | ⬜ |
+| Leo contract: single private payment | ✅ |
+| Basic web UI (connect wallet, send payment) | ✅ |
+| Recipient sees only their payment | ✅ |
+| Testnet deployment | ✅ |
 | GitHub repo with README | ✅ |
 
 **Privacy Demonstrated**: Payment amounts hidden from public
@@ -348,8 +348,17 @@ npm run dev
 
 ```bash
 cd contracts
-leo deploy --network testnet
+leo deploy --network testnet --broadcast --yes --consensus-version 2
 ```
+
+### Live Deployment (Testnet)
+
+| Field | Value |
+|-------|-------|
+| **Program** | `shieldpay.aleo` |
+| **Network** | Aleo Testnet |
+| **Transaction ID** | `at1usjzgsqgu74hytmqjtaq8rt590pvc9qm209d3czezq5cqtsrpvgqq4cez8` |
+| **Explorer** | [View on Aleo Explorer](https://explorer.aleo.org/program/shieldpay.aleo) |
 
 ---
 

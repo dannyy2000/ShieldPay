@@ -5,6 +5,11 @@
 
 program shieldpay.aleo {
 
+    @noupgrade
+    async constructor() {
+        // The Leo compiler automatically generates the constructor logic.
+    }
+
     // ============================================
     // RECORD: Payment
     // ============================================
