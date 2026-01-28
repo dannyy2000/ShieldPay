@@ -84,7 +84,7 @@ ShieldPay leverages Aleo's zero-knowledge architecture to enable:
 |-------|------------|
 | **Blockchain** | Aleo (L1 with programmable privacy) |
 | **Smart Contracts** | Leo |
-| **Frontend** | Next.js, TypeScript, Tailwind CSS |
+| **Frontend** | React, JavaScript|
 | **Wallet** | Leo Wallet / Aleo Wallet Adapter |
 | **AI** | LLM for natural language processing |
 
